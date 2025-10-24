@@ -15,10 +15,10 @@ on:
 jobs:
   build:
     name: microvm-kernel-${{ matrix.label }}
-    runs-on: [actuated-32cpu-32gb, "${{ matrix.label }}" ]
+    runs-on: [actuated-12cpu-32gb, "${{ matrix.label }}" ]
     strategy:
       matrix:
-        label: [a102]
+        label: [hetzner]
 
     steps:
 # vmmeter start
