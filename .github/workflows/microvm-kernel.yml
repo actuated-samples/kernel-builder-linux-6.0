@@ -72,7 +72,7 @@ jobs:
            # Make the config
            make LOCALVERSION= olddefconfig
 
-           cat src/linux.git/.config
+           cat .config
 
       - name: Cache vmlinux
         id: cache-vmlinux
