@@ -56,7 +56,7 @@ jobs:
         run: |
           time git clone https://github.com/torvalds/linux.git src/linux.git --depth=1 --branch v6.13
       - name: make config
-         run: |
+        run: |
            cd src/linux.git 
            # Generate a default config
            #make defconfig
@@ -73,15 +73,15 @@ jobs:
            make LOCALVERSION= olddefconfig
 
       - name: Cache vmlinux
-         id: cache-vmlinux
-         uses: actions/cache@v4
-         with:
+        id: cache-vmlinux
+        uses: actions/cache@v4
+        with:
            path: src/linux.git/vmlinux
            key: vmlinux-${{ hashFiles('src/linux.git/.config') }}
 
-       - name: Make vmlinux
-         if: steps.cache-vmlinux.outputs.cache-hit != 'true'
-         run: |
+      - name: Make vmlinux
+        if: steps.cache-vmlinux.outputs.cache-hit != 'true'
+        run: |
            cd src/linux.git
            time make vmlinux -j$(nproc)
            du -h ./vmlinux
