@@ -79,7 +79,7 @@ jobs:
         uses: actions/cache@v4
         with:
            path: src/linux.git/vmlinux
-           key: vmlinux-${{ hashFiles('src/linux.git/.config') }}
+           key: vmlinux-${{ hashFiles('./src/linux.git/.config') }}
 
       - name: Make vmlinux
         if: steps.cache-vmlinux.outputs.cache-hit != 'true'
