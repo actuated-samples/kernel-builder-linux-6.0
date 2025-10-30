@@ -15,10 +15,10 @@ on:
 jobs:
   build:
     name: microvm-kernel-${{ matrix.label }}
-    runs-on: [actuated-4cpu-8gb, "${{ matrix.label }}" ]
+    runs-on: [actuated-32cpu-32gb, "${{ matrix.label }}" ]
     strategy:
       matrix:
-        label: [gcp1]
+        label: [a102]
 
     steps:
 # vmmeter start
@@ -55,28 +55,36 @@ jobs:
       - name: clone linux
         run: |
           time git clone https://github.com/torvalds/linux.git src/linux.git --depth=1 --branch v6.13
-      - name: make config
-        run: |
-          cd src/linux.git 
-          # Generate a default config
-          #make defconfig
+       - name: make config
+         run: |
+           cd src/linux.git 
+           # Generate a default config
+           #make defconfig
 
-          # Generate a minimal config
-          make allnoconfig
+           # Generate a minimal config
+           make allnoconfig
 
-          # Turn off a couple of things
-          scripts/config --disable SYSTEM_TRUSTED_KEYS
-          scripts/config --disable SYSTEM_REVOCATION_KEYS
-          scripts/config --disable SYSTEM_TRUSTED_KEYRING 
+           # Turn off a couple of things
+           scripts/config --disable SYSTEM_TRUSTED_KEYS
+           scripts/config --disable SYSTEM_REVOCATION_KEYS
+           scripts/config --disable SYSTEM_TRUSTED_KEYRING 
 
-          # Make the config
-          make LOCALVERSION= olddefconfig
+           # Make the config
+           make LOCALVERSION= olddefconfig
 
-      - name: Make vmlinux
-        run: |
-          cd src/linux.git
-          time make vmlinux -j$(nproc)
-          du -h ./vmlinux
+       - name: Cache vmlinux
+         id: cache-vmlinux
+         uses: actions/cache@v4
+         with:
+           path: src/linux.git/vmlinux
+           key: vmlinux-${{ hashFiles('src/linux.git/.config') }}
+
+       - name: Make vmlinux
+         if: steps.cache-vmlinux.outputs.cache-hit != 'true'
+         run: |
+           cd src/linux.git
+           time make vmlinux -j$(nproc)
+           du -h ./vmlinux
 
       - name: Check RAM disk usage and clean it up
         if: always()
