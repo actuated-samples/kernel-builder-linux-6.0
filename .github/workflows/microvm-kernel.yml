@@ -55,7 +55,7 @@ jobs:
       - name: clone linux
         run: |
           time git clone https://github.com/torvalds/linux.git src/linux.git --depth=1 --branch v6.13
-       - name: make config
+      - name: make config
          run: |
            cd src/linux.git 
            # Generate a default config
@@ -72,7 +72,7 @@ jobs:
            # Make the config
            make LOCALVERSION= olddefconfig
 
-       - name: Cache vmlinux
+      - name: Cache vmlinux
          id: cache-vmlinux
          uses: actions/cache@v4
          with:
