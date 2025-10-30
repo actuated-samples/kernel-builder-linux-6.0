@@ -72,6 +72,8 @@ jobs:
            # Make the config
            make LOCALVERSION= olddefconfig
 
+           cat src/linux.git/.config
+
       - name: Cache vmlinux
         id: cache-vmlinux
         uses: actions/cache@v4
@@ -86,9 +88,9 @@ jobs:
            time make vmlinux -j$(nproc)
            du -h ./vmlinux
 
-      - name: Check RAM disk usage and clean it up
-        if: always()
-        run: |
-          df -h `pwd`/src
-          sudo umount `pwd`/src || true
-          rm -rf `pwd`/src
+      # - name: Check RAM disk usage and clean it up
+      #   if: always()
+      #   run: |
+      #     df -h `pwd`/src
+      #     sudo umount `pwd`/src || true
+      #     rm -rf `pwd`/src
