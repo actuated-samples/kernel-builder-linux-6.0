@@ -14,7 +14,7 @@ on:
 jobs:
   build:
     name: microvm-kernel-${{ matrix.label }}
-    runs-on: ubuntu-latest
+    runs-on: actuated-32cpu-32gb
     # runs-on: [actuated-32cpu-32gb, "${{ matrix.label }}" ]
     # strategy:
     #   matrix:
