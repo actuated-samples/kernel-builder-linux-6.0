@@ -15,7 +15,7 @@ jobs:
   build:
     name: microvm-kernel-${{ matrix.label }}
     # runs-on: [actuated-16cpu-24gb-burstable, a102]
-    runs-on: [actuated-16cpu-24gb-burstable, "${{ matrix.label }}" ]
+    runs-on: [actuated-16cpu-24gb, "${{ matrix.label }}" ]
     strategy:
       matrix:
         label: [a102, am, s9]
