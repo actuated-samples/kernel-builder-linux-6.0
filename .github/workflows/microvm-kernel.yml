@@ -14,11 +14,11 @@ on:
 jobs:
   build:
     name: microvm-kernel-${{ matrix.label }}
-    runs-on: [actuated-16cpu-24gb-burstable, a102]
-    # runs-on: [actuated-32cpu-32gb, "${{ matrix.label }}" ]
-    # strategy:
-    #   matrix:
-    #     label: [a102]
+    # runs-on: [actuated-16cpu-24gb-burstable, a102]
+    runs-on: [actuated-16cpu-24gb-burstable, "${{ matrix.label }}" ]
+    strategy:
+      matrix:
+        label: [a102, am, s9]
 
     steps:
 # vmmeter start
@@ -74,15 +74,15 @@ jobs:
 
            cat .config
 
-      - name: Cache vmlinux
-        id: cache-vmlinux
-        uses: actions/cache@v4
-        with:
-           path: src/linux.git/vmlinux
-           key: vmlinux-${{ hashFiles('./src/linux.git/.config') }}
+      # - name: Cache vmlinux
+      #   id: cache-vmlinux
+      #   uses: actions/cache@v4
+      #   with:
+      #      path: src/linux.git/vmlinux
+      #      key: vmlinux-${{ hashFiles('./src/linux.git/.config') }}
 
       - name: Make vmlinux
-        if: steps.cache-vmlinux.outputs.cache-hit != 'true'
+        # if: steps.cache-vmlinux.outputs.cache-hit != 'true'
         run: |
            cd src/linux.git
            time make vmlinux -j$(nproc)
