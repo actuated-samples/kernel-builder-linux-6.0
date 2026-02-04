@@ -18,7 +18,7 @@ jobs:
     runs-on: [actuated-16cpu-24gb, "${{ matrix.label }}" ]
     strategy:
       matrix:
-        label: [a102, am, s9]
+        label: [a102]
 
     steps:
 # vmmeter start
